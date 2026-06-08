@@ -9,8 +9,8 @@ import NavigationButton from './NavigationButton'
 import { DatePicker } from './Datepicker'
 import { PickCity } from './PickCity'
 import axios from 'axios'
+import { BaseUrl } from '../store/useUserStore'
 
-export const BaseUrl = 'http://localhost:3000'
 
 const Handleform = () => {
   const [selectedCity, setSelectedCity] = useState('')

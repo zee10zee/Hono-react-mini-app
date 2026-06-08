@@ -2,6 +2,11 @@
 import {create} from 'zustand'
 import type User from '../../../server/db/data'
 import axios from 'axios'
+export const BaseUrl = import.meta.env.DEV 
+  ? 'http://localhost:3000' 
+  : 'https://hono-react-mini-app.vercel.app';
+
+
 type UserState = {
   users : User[]
 }
@@ -12,8 +17,6 @@ const useUserStore = create<UserState>(()=>({
 
 
 export const fetchUsers  = async()=>{
-    const BaseUrl = 'http://localhost:3000'
-
           const response = await axios.get(BaseUrl + '/')
           const fetchedData = response.data
           const dbUsers = fetchedData.users;
