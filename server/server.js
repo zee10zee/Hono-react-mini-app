@@ -27,13 +27,13 @@ const userForDatabase = {
    return c.json({ message: 'User received', data: newUser }) 
 })
 
-// if(process.env.environment === 'development'){
-// serve({
-//     fetch: app.fetch,
-//     port: 3000
-// }, (info)=>{
-//     console.log(`Server running at ${info.port}`)
-// })
-// }
+if(process.env.environment === 'development'){
+serve({
+    fetch: app.fetch,
+    port: 3000
+}, (info)=>{
+    console.log(`Server running at ${info.port}`)
+})
+}
 
  export default app

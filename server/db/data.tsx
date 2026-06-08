@@ -2,7 +2,7 @@
 
 // give me ten users type 
 export default interface User {
-    id: number,
+    id?: number,
     name: string,
     email: string, 
     city : string,
