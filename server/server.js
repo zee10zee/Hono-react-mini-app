@@ -18,7 +18,6 @@ app.get('/', async(c)=>{
 
 app.post('/new-user', async(c)=>{
   const newUserData = await c.req.json()
-usersTable
 
 const userForDatabase = {
     ...newUserData,
