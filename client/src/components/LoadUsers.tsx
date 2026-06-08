@@ -44,7 +44,7 @@ const LoadUsers = () => {
         <CardContent>
           
             <p>City: {user.city}</p>
-            <p>Date of Birth: {user.dob}</p>
+            <p>Date of Birth: {new Date(user.dob).toLocaleString('en-US', {weekday : 'long', month : 'short', year : 'numeric' })}</p>
         </CardContent>
         
       </Card>  
