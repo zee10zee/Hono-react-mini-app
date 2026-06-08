@@ -2,42 +2,50 @@
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import {User2} from 'lucide-react'
-import useUserStore from '../store/useUserStore'
+import useUserStore, { addUser } from '../store/useUserStore'
 import { useNavigate } from 'react-router-dom'
-import {  useState } from 'react'
+import { useState } from 'react'
 import NavigationButton from './NavigationButton'
 import { DatePicker } from './Datepicker'
 import { PickCity } from './PickCity'
+import axios from 'axios'
+
+export const BaseUrl = 'http://localhost:3000'
 
 const Handleform = () => {
   const [selectedCity, setSelectedCity] = useState('')
   const [selectedDate, setSelectedDate] = useState('')
   const navigate = useNavigate()
   const users = useUserStore((state)=> state.users)
-  const addUser = useUserStore((state)=> state.addUser)
+ 
 
 
   async function createUser(formData) {  
      formData.append("dob", selectedDate);
-    formData.append("city", selectedCity);
+     formData.append("city", selectedCity);
     
     const name = formData.get("fname");
     const email = formData.get("email");
     const dob = formData.get("dob");
     const city = formData.get("city");
-    const userId = users.length > 0 ? users.length + 1 : 1
-    const newUser =  {
-      id : userId,
-       name , 
-       email,
-       city, 
-       dob
-    }
 
-    // return alert(name + email  + 'city ' + city  + 'date of birth ' + dob)
-    addUser(newUser)
-    alert('New user added success')
-    navigate('/')
+    const id = users.length > 0 ? users.length + 1 : 1
+    // for db as its auto genrate , no id is required 
+
+    const newUser =  { name , email, city, dob }
+    // add on client first only if its for assurity that the next move saves data on server db
+    
+    try{
+      const response = await axios.post(BaseUrl + '/new-user', newUser)
+      if(response.status === 200){
+        console.log(response.data, ' the created data')
+        addUser(newUser)
+        alert('New user added success')
+          navigate('/')
+      }
+    }catch(err){
+      console.error('some error while creating user on db', err)
+    }
   }
 
   return (
