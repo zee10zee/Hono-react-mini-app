@@ -4,6 +4,7 @@ import {serve} from '@hono/node-server'
 import {cors} from 'hono/cors'
 import {createUser, listUsers} from './db/actions/users.js'
 import { usersTable } from './db/schema/users.js'
+import { db } from './db/index.js'
 
 const app = new Hono()
 app.use('*', cors())
@@ -23,8 +24,19 @@ const userForDatabase = {
     ...newUserData,
     dob: newUserData.dob ? new Date(newUserData.dob) : null  // ← Convert string to Date
   };
-  const newUser = await createUser(userForDatabase)
-   return c.json({ message: 'User received', data: newUser }) 
+
+  try {
+      const result = await createUser(userForDatabase)
+
+      if(!result.success){
+        console.log(result.error,' the error')
+          return c.json({message : result.error})
+      }else {
+          return c.json({ message: 'User received', data: result.newUser }) 
+      }
+  } catch (error) {
+    console.log(error, ' the errror')
+  }
 })
 
 if(process.env.environment === 'development'){

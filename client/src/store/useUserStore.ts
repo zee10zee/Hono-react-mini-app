@@ -13,6 +13,7 @@ type UserState = {
 
 const useUserStore = create<UserState>(()=>({
     users : [],
+    loading : false
 }))
 
 

@@ -15,36 +15,45 @@ import { BaseUrl } from '../store/useUserStore'
 const Handleform = () => {
   const [selectedCity, setSelectedCity] = useState('')
   const [selectedDate, setSelectedDate] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const users = useUserStore((state)=> state.users)
  
-
-
   async function createUser(formData) {  
      formData.append("dob", selectedDate);
-     formData.append("city", selectedCity);
-    
+     formData.append("city", selectedCity);   
     const name = formData.get("fname");
     const email = formData.get("email");
     const dob = formData.get("dob");
     const city = formData.get("city");
 
-    const id = users.length > 0 ? users.length + 1 : 1
-    // for db as its auto genrate , no id is required 
 
+    if(name === '' || email === '' || dob === '' || city === ''){
+      return alert('no input should be left empty , please check !')
+    }
+
+    // for db as its auto genrate , no id is required 
     const newUser =  { name , email, city, dob }
-    // add on client first only if its for assurity that the next move saves data on server db
     
     try{
+      setLoading(true)
       const response = await axios.post(BaseUrl + '/new-user', newUser)
-      if(response.status === 200){
-        console.log(response.data, ' the created data')
+
+      if(response.status !== 200){ 
+        return alert(response.data.message)
+      }
+
+      setLoading(false)
+       console.log(response.data, ' the created data')
         addUser(newUser)
         alert('New user added success')
           navigate('/')
-      }
+
     }catch(err){
-      console.error('some error while creating user on db', err)
+      setLoading(false)
+      console.log(err, ' the error ')
+
+    } finally {
+      setLoading(false) 
     }
   }
 
@@ -63,7 +72,7 @@ const Handleform = () => {
          <DatePicker name='dob'/>
          <PickCity name="city" value={selectedCity} onChange={setSelectedCity} />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled ={loading}>{loading ? 'submitting ...' :  'Submit' }</Button>
       </form>
     </div>
   )

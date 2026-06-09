@@ -3,12 +3,23 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { usersTable } from '../schema/users.js';
 import { configDotenv } from 'dotenv';
 import { db } from '../index.js';
-import { desc } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 configDotenv()
-console.log(db, ' the db itself')
-  export const createUser = async(userData)=>{
+  export const createUser = async(userData)=>{   
+  const userExists = await db.select().from(usersTable).where(eq(usersTable.email, userData.email))
+
+  if(userExists.length > 0) {
+     return { 
+        success: false, 
+        error: 'User already registered with this email' 
+      }
+  }
+
   const createdUser = await db.insert(usersTable).values(userData).returning();
-  return createdUser
+  return {
+        success: true, 
+        newUser : createdUser
+  }
 }
 
 
