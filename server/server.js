@@ -30,7 +30,7 @@ const userForDatabase = {
 
       if(!result.success){
         console.log(result.error,' the error')
-          return c.json({message : result.error})
+          return c.json({message : result.error},203)
       }else {
           return c.json({ message: 'User received', data: result.newUser }) 
       }

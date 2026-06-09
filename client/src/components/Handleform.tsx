@@ -38,7 +38,9 @@ const Handleform = () => {
       setLoading(true)
       const response = await axios.post(BaseUrl + '/new-user', newUser)
 
-      if(response.status !== 200){ 
+      console.log(response.status, ' status')
+
+      if(response.status !== 200 || 201){ 
         return alert(response.data.message)
       }
 
@@ -50,7 +52,7 @@ const Handleform = () => {
 
     }catch(err){
       setLoading(false)
-      console.log(err, ' the error ')
+      console.error(err, ' the error ')
 
     } finally {
       setLoading(false) 
