@@ -40,7 +40,7 @@ const Handleform = () => {
 
       console.log(response.status, ' status')
 
-      if(response.status !== 200 || 201){ 
+      if(response.status !== 200 && response.statusText !== 'ok'){ 
         return alert(response.data.message)
       }
 
